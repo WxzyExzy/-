@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.zua.smbms.dao.ProviderMapper">
+  <resultMap id="BaseResultMap" type="cn.zua.smbms.bean.Provider">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="pro_code" jdbcType="VARCHAR" property="proCode" />
+    <result column="pro_name" jdbcType="VARCHAR" property="proName" />
+    <result column="pro_desc" jdbcType="VARCHAR" property="proDesc" />
+    <result column="pro_contact" jdbcType="VARCHAR" property="proContact" />
+    <result column="pro_phone" jdbcType="VARCHAR" property="proPhone" />
+    <result column="pro_address" jdbcType="VARCHAR" property="proAddress" />
+    <result column="pro_fax" jdbcType="VARCHAR" property="proFax" />
+    <result column="created_by" jdbcType="BIGINT" property="createdBy" />
+    <result column="creation_date" jdbcType="TIMESTAMP" property="creationDate" />
+    <result column="modify_date" jdbcType="TIMESTAMP" property="modifyDate" />
+    <result column="modify_by" jdbcType="BIGINT" property="modifyBy" />
+  </resultMap>
+  <select id="selectProviderByPageAndCondition" resultMap="BaseResultMap">
+    select * from smbms_provider where 1=1
+    <if test="param1 != null and param1 != ''">
+      and pro_code like "%${param1}%"
+    </if>
+    <if test="param2 != null and param2 != ''">
+      and pro_name like "%${param2}%"
+    </if>
+    order by creation_date desc  limit #{param3} , #{param4}
+  </select>
+
+  <select id="getCountByCondition" resultType="int">
+    select count(1) from smbms_provider where 1=1
+    <if test="param1 != null and param1 != ''">
+      and pro_code like "%${param1}%"
+    </if>
+    <if test="param2 != null and param2 != ''">
+      and pro_name like "%${param2}%"
+    </if>
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from smbms_provider
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="cn.zua.smbms.bean.Provider">
+    insert into smbms_provider (id, pro_code, pro_name, 
+      pro_desc, pro_contact, pro_phone, 
+      pro_address, pro_fax, created_by, 
+      creation_date, modify_date, modify_by
+      )
+    values (#{id,jdbcType=BIGINT}, #{proCode,jdbcType=VARCHAR}, #{proName,jdbcType=VARCHAR}, 
+      #{proDesc,jdbcType=VARCHAR}, #{proContact,jdbcType=VARCHAR}, #{proPhone,jdbcType=VARCHAR}, 
+      #{proAddress,jdbcType=VARCHAR}, #{proFax,jdbcType=VARCHAR}, #{createdBy,jdbcType=BIGINT}, 
+      #{creationDate,jdbcType=TIMESTAMP}, #{modifyDate,jdbcType=TIMESTAMP}, #{modifyBy,jdbcType=BIGINT}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="cn.zua.smbms.bean.Provider">
+    update smbms_provider
+    set pro_code = #{proCode,jdbcType=VARCHAR},
+      pro_name = #{proName,jdbcType=VARCHAR},
+      pro_desc = #{proDesc,jdbcType=VARCHAR},
+      pro_contact = #{proContact,jdbcType=VARCHAR},
+      pro_phone = #{proPhone,jdbcType=VARCHAR},
+      pro_address = #{proAddress,jdbcType=VARCHAR},
+      pro_fax = #{proFax,jdbcType=VARCHAR},
+      created_by = #{createdBy,jdbcType=BIGINT},
+      creation_date = #{creationDate,jdbcType=TIMESTAMP},
+      modify_date = #{modifyDate,jdbcType=TIMESTAMP},
+      modify_by = #{modifyBy,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select id, pro_code, pro_name, pro_desc, pro_contact, pro_phone, pro_address, pro_fax, 
+    created_by, creation_date, modify_date, modify_by
+    from smbms_provider
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, pro_code, pro_name, pro_desc, pro_contact, pro_phone, pro_address, pro_fax, 
+    created_by, creation_date, modify_date, modify_by
+    from smbms_provider
+  </select>
+</mapper>

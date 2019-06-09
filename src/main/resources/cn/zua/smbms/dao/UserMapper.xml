@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.zua.smbms.dao.UserMapper">
+  <resultMap id="BaseResultMap" type="cn.zua.smbms.bean.User">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="user_code" jdbcType="VARCHAR" property="userCode" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="user_password" jdbcType="VARCHAR" property="userPassword" />
+    <result column="gender" jdbcType="INTEGER" property="gender" />
+    <result column="birthday" jdbcType="DATE" property="birthday" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="user_role" jdbcType="BIGINT" property="userRole" />
+    <result column="created_by" jdbcType="BIGINT" property="createdBy" />
+    <result column="creation_date" jdbcType="TIMESTAMP" property="creationDate" />
+    <result column="modify_by" jdbcType="BIGINT" property="modifyBy" />
+    <result column="modify_date" jdbcType="TIMESTAMP" property="modifyDate" />
+  </resultMap>
+  
+  <select id="selectUserCodeExist" resultMap="BaseResultMap">
+  		select * from smbms_user where user_code = #{userCode}
+  </select>
+  
+  <update id="updatePwd" >
+  		update smbms_user set user_password = #{param2} where id = #{param1}
+  </update>
+  
+  <select id="selectUserByPageAndCondition" resultMap="BaseResultMap">
+  		select * from smbms_user where 1=1
+  		<if test="param1 != null and param1 != ''">
+  			and user_name like "%${param1}%"
+  		</if>
+  		<if test="param2 != null and param2 != ''">
+  			and user_role = #{param2}
+  		</if>
+  		 order by creation_date  desc  limit #{param3} , #{param4} 
+  </select>
+  
+  <select id="getCountByCondition" resultType="int">
+  		select count(1) from smbms_user where 1=1
+  		<if test="param1 != null and param1 != ''">
+  			and user_name like "%${param1}%"
+  		</if>
+  		<if test="param2 != null and param2 != ''">
+  			and user_role = #{param2}
+  		</if>
+  </select>
+  
+  <select id="selectByUserCode" resultMap="BaseResultMap" >
+  		select * from smbms_user where user_code = #{param1}  and user_password = #{param2}
+  </select>
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from smbms_user
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  
+  <insert id="insert" parameterType="cn.zua.smbms.bean.User">
+    insert into smbms_user (id, user_code, user_name, 
+      user_password, gender, birthday, 
+      phone, address, user_role, 
+      created_by, creation_date, modify_by, 
+      modify_date)
+    values (#{id,jdbcType=BIGINT}, #{userCode,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, 
+      #{userPassword,jdbcType=VARCHAR}, #{gender,jdbcType=INTEGER}, #{birthday,jdbcType=DATE}, 
+      #{phone,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{userRole,jdbcType=BIGINT}, 
+      #{createdBy,jdbcType=BIGINT}, #{creationDate,jdbcType=TIMESTAMP}, #{modifyBy,jdbcType=BIGINT}, 
+      #{modifyDate,jdbcType=TIMESTAMP})
+  </insert>
+  
+  <update id="updateByPrimaryKey" parameterType="cn.zua.smbms.bean.User">
+    update smbms_user
+    set user_code = #{userCode,jdbcType=VARCHAR},
+      user_name = #{userName,jdbcType=VARCHAR},
+      user_password = #{userPassword,jdbcType=VARCHAR},
+      gender = #{gender,jdbcType=INTEGER},
+      birthday = #{birthday,jdbcType=DATE},
+      phone = #{phone,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      user_role = #{userRole,jdbcType=BIGINT},
+      created_by = #{createdBy,jdbcType=BIGINT},
+      creation_date = #{creationDate,jdbcType=TIMESTAMP},
+      modify_by = #{modifyBy,jdbcType=BIGINT},
+      modify_date = #{modifyDate,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select id, user_code, user_name, user_password, gender, birthday, phone, address, 
+    user_role, created_by, creation_date, modify_by, modify_date
+    from smbms_user
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, user_code, user_name, user_password, gender, birthday, phone, address, 
+    user_role, created_by, creation_date, modify_by, modify_date
+    from smbms_user
+  </select>
+</mapper>
